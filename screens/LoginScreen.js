@@ -1,14 +1,8 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { UserContext } from "../context/UserContext";
 import { useNavigation } from "@react-navigation/native";
+import { TextInput, Button, Text } from "react-native-paper";
 
 export default function LoginScreen() {
   const { login } = useContext(UserContext);
@@ -21,12 +15,12 @@ export default function LoginScreen() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email || !password) {
-      alert('Please enter both email and password');
+      alert("Please enter both email and password");
       return;
     }
 
     if (!emailRegex.test(email)) {
-      alert('Invalid email format');
+      alert("Invalid email format");
       return;
     }
 
@@ -38,23 +32,29 @@ export default function LoginScreen() {
       <Text style={styles.title}>Login</Text>
 
       <TextInput
-        style={styles.input}
-        placeholder="Email"
+        label="Email"
         value={email}
         onChangeText={setEmail}
+        mode="outlined"
         keyboardType="email-address"
         autoCapitalize="none"
+        left={<TextInput.Icon icon="email" />}
+        style={styles.input}
       />
 
       <TextInput
-        style={styles.input}
-        placeholder="Password"
+        label="Password"
         value={password}
         onChangeText={setPassword}
+        mode="outlined"
         secureTextEntry
+        left={<TextInput.Icon icon="lock" />}
+        style={styles.input}
       />
 
-      <Button title="Log In" onPress={handleLogin} />
+      <Button mode="contained" onPress={handleLogin}>
+        Log In
+      </Button>
 
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Text style={styles.registerLink}>Don't have an account? Register</Text>
@@ -77,17 +77,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    backgroundColor: "#fff",
-    padding: 12,
     marginBottom: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ccc",
+  },
+  button: {
+    marginTop: 8,
   },
   registerLink: {
     marginTop: 16,
     textAlign: "center",
-    color: "#007AFF",
-    fontSize: 16,
+    color: '#4a90e2',
   },
 });

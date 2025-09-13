@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { View, Text, Button, StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import { Text, Button, Provider as PaperProvider } from 'react-native-paper';
 import { UserContext } from '../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,20 +8,41 @@ export default function HomeScreen() {
   const { user, logout } = useContext(UserContext);
   const navigation = useNavigation();
 
+  const buttons = [
+    { label: 'Flight Status', screen: 'FlightStatus', icon: 'airplane' },
+    { label: 'Book Ticket', screen: 'BookTicket', icon: 'ticket' },
+    { label: 'Book Parking', screen: 'BookParking', icon: 'car' },
+    { label: 'My Requests', screen: 'MyRequests', icon: 'clipboard-list' },
+    { label: 'Settings', screen: 'Settings', icon: 'cog' },
+  ];
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Welcome, {user?.email}</Text>
+    <PaperProvider>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Welcome, {user?.email}</Text>
 
-      <Button title="✈️ Flight Status" onPress={() => navigation.navigate('FlightStatus')} />
-      <Button title="🎫 Book Ticket" onPress={() => navigation.navigate('BookTicket')} />
-      <Button title="🅿️ Book Parking" onPress={() => navigation.navigate('BookParking')} />
-      <Button title="📋 My Requests" onPress={() => navigation.navigate('MyRequests')} />
-      <Button title="⚙️ Settings" onPress={() => navigation.navigate('Settings')} />
+        {buttons.map((btn, index) => (
+          <Button
+            key={index}
+            mode="contained"
+            icon={btn.icon}
+            style={styles.button}
+            onPress={() => navigation.navigate(btn.screen)}
+          >
+            {btn.label}
+          </Button>
+        ))}
 
-      <View style={{ marginTop: 24 }}>
-        <Button title="Log Out" color="red" onPress={logout} />
-      </View>
-    </ScrollView>
+        <Button
+          mode="contained"
+          icon="logout"
+          style={[styles.button, styles.logout]}
+          onPress={logout}
+        >
+          Log Out
+        </Button>
+      </ScrollView>
+    </PaperProvider>
   );
 }
 
@@ -29,12 +51,20 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: '#f2f2f2',
     flexGrow: 1,
-    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 24,
-    marginBottom: 24,
-    textAlign: 'center',
+    fontSize: 26,
+    marginBottom: 32,
     fontWeight: 'bold',
+    color: '#333',
+  },
+  button: {
+    marginVertical: 8,
+    width: '100%',
+    maxWidth: 300,
+  },
+  logout: {
+    backgroundColor: '#d9534f',
   },
 });
