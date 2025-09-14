@@ -3,10 +3,12 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { UserContext } from "../context/UserContext";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput, Button, Text } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
   const { login } = useContext(UserContext);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,12 +17,12 @@ export default function LoginScreen() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email || !password) {
-      alert("Please enter both email and password");
+      alert(`${t("enter_email_password")}`);
       return;
     }
 
     if (!emailRegex.test(email)) {
-      alert("Invalid email format");
+      alert(`${t("invalid_email")}`);
       return;
     }
 
@@ -29,10 +31,10 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>{t("login")}</Text>
 
       <TextInput
-        label="Email"
+        label={t("email")}
         value={email}
         onChangeText={setEmail}
         mode="outlined"
@@ -43,7 +45,7 @@ export default function LoginScreen() {
       />
 
       <TextInput
-        label="Password"
+        label={t("password")}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
@@ -53,11 +55,11 @@ export default function LoginScreen() {
       />
 
       <Button mode="contained" onPress={handleLogin}>
-        Log In
+        {t("login")}
       </Button>
 
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.registerLink}>Don't have an account? Register</Text>
+        <Text style={styles.registerLink}>{t("no_account")}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -85,6 +87,6 @@ const styles = StyleSheet.create({
   registerLink: {
     marginTop: 16,
     textAlign: "center",
-    color: '#4a90e2',
+    color: "#4a90e2",
   },
 });

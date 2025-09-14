@@ -4,10 +4,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../context/UserContext";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput, Button, Text } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterScreen() {
   const { register } = useContext(UserContext);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,22 +19,22 @@ export default function RegisterScreen() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      alert("Invalid email format");
+      alert(`${t("invalid_email")}`);
       return;
     }
 
     if (password.length < 2) {
-      alert("Password must be at least 2 characters");
+      alert(`${t("password_too_short")}`);
       return;
     }
 
     if (!email || !password || !confirmPassword) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert(`${t("error_fill_fields")}`);
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match");
+      Alert.alert(`${t("error_passwords_mismatch")}`);
       return;
     }
 
@@ -41,17 +43,17 @@ export default function RegisterScreen() {
       await AsyncStorage.setItem("user", JSON.stringify(userData));
       register(userData);
     } catch (error) {
-      Alert.alert("Error", "Failed to save user data");
+      Alert.alert(`${t("error_save_user")}`);
     }
     register({ email, password });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>{t("register")}</Text>
 
       <TextInput
-        label="Email"
+        label={t("email")}
         value={email}
         onChangeText={setEmail}
         mode="outlined"
@@ -62,17 +64,7 @@ export default function RegisterScreen() {
       />
 
       <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        mode="outlined"
-        secureTextEntry
-        left={<TextInput.Icon icon="lock" />}
-        style={styles.input}
-      />
-
-      <TextInput
-        label="Confirm Password"
+        label={t("password")}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
@@ -82,11 +74,11 @@ export default function RegisterScreen() {
       />
 
       <Button mode="contained" style={styles.button} onPress={handleRegister}>
-        Register
+        {t("register")}
       </Button>
 
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.loginLink}>Already have an account? Log In</Text>
+        <Text style={styles.loginLink}>{t("already_have_account")}</Text>
       </TouchableOpacity>
     </View>
   );
