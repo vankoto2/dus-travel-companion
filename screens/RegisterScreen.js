@@ -13,7 +13,6 @@ export default function RegisterScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,13 +27,8 @@ export default function RegisterScreen() {
       return;
     }
 
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password) {
       Alert.alert(`${t("error_fill_fields")}`);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert(`${t("error_passwords_mismatch")}`);
       return;
     }
 
